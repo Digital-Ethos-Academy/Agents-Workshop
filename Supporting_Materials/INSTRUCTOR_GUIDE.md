@@ -12,10 +12,10 @@ This guide provides teaching tips, timing suggestions, common questions, and ass
 |---------|----------|---------|
 | Opening & Setup | 20 min | Intros, environment check, API key verification |
 | Lecture: Agent Fundamentals | 30 min | What are agents, ReAct, tools, when to use |
-| **Lab 1**: LangChain Basics | 45 min | Hands-on: first agent with tools |
+| **Lab 1**: LangChain Agents | 45 min | Hands-on: first agent with custom tools |
 | Break | 10 min | |
-| Lecture: State Machines | 20 min | Why graphs, LangGraph concepts |
-| **Lab 2**: LangGraph | 45 min | Hands-on: state graph with routing |
+| Lecture: Multi-Agent Systems | 20 min | Why multi-agent, patterns, AutoGen/CrewAI intro |
+| **Lab 2**: AutoGen & CrewAI | 45 min | Hands-on: multi-agent teams with both frameworks |
 | Wrap-up & Q&A | 10 min | Review key concepts, preview Session 2 |
 
 ### Session 2: Advanced Patterns (3 hours total)
@@ -23,13 +23,13 @@ This guide provides teaching tips, timing suggestions, common questions, and ass
 | Segment | Duration | Content |
 |---------|----------|---------|
 | Recap & Questions | 15 min | Review Session 1, address questions |
-| Lecture: Multi-Agent | 25 min | Why multi-agent, patterns, AutoGen intro |
-| **Lab 3**: AutoGen | 45 min | Hands-on: multi-agent team |
+| Lecture: State Machines | 25 min | Why graphs, LangGraph concepts, conditional routing |
+| **Lab 3**: LangGraph Workflows | 45 min | Hands-on: stateful workflows with routing |
 | Break | 10 min | |
-| Lecture: Production Patterns | 20 min | Human-in-loop, error handling, deployment |
-| **Lab 4**: Complex Workflows | 45 min | Hands-on: production-ready agent |
+| Lecture: Framework Selection | 20 min | Decision framework, production considerations |
+| **Lab 4**: Capstone Project | 45 min | Hands-on: build your own agent |
 | Framework Overview | 10 min | Brief SmolAgents, ADK, A2A overview |
-| Capstone Introduction | 10 min | Explain capstone, show solution approach |
+| Demo & Wrap-up | 10 min | Participants demo their agents, Q&A |
 
 ---
 

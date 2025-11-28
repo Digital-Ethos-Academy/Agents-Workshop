@@ -263,18 +263,18 @@ When should you use which framework?
 - ✅ Straightforward Q&A or RAG
 - ❌ Complex multi-step workflows
 
-### Use LangGraph (Labs 2 & 4) When:
+### Use AutoGen & CrewAI (Lab 2) When:
+- ✅ Need multiple specialized agents
+- ✅ Want agents to debate/critique each other
+- ✅ Building agent "teams" with roles
+- ❌ Need fine-grained workflow control
+
+### Use LangGraph (Lab 3) When:
 - ✅ Need controlled, predictable workflows
 - ✅ Require human-in-the-loop approvals
 - ✅ Building stateful, resumable processes
 - ✅ Want visual representation of logic
 - ❌ Simple one-shot tasks
-
-### Use AutoGen (Lab 3) When:
-- ✅ Need multiple specialized agents
-- ✅ Want agents to debate/critique each other
-- ✅ Building agent "teams" with roles
-- ❌ Need fine-grained workflow control
 
 ### Use SmolAgents When:
 - ✅ Want minimal dependencies
