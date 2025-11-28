@@ -56,22 +56,28 @@ Agents-Workshop/
 ├── README.md                      # This file
 ├── requirements.txt               # Python dependencies
 ├── .env.example                   # API key template
-├── utils/                         # Shared utilities
+├── check_environment.py           # Environment verification script
+├── utils/                         # Shared utilities (LLM helpers, model configs)
 ├── Labs/
 │   ├── Session_1/
 │   │   ├── README_Session_1.md    # Session 1 guide
 │   │   ├── Lab_1_LangChain_Agents.ipynb
-│   │   ├── Lab_2_AutoGen_and_CrewAI.ipynb
-│   │   └── assets/
+│   │   └── Lab_2_AutoGen_and_CrewAI.ipynb
 │   └── Session_2/
 │       ├── README_Session_2.md    # Session 2 guide
 │       ├── Lab_3_LangGraph_Workflows.ipynb
-│       ├── Lab_4_Capstone_Build_Your_Agent.ipynb
-│       └── assets/
+│       └── Lab_4_Capstone_Build_Your_Agent.ipynb
 ├── Solutions/                     # Reference implementations
+│   └── lab4_capstone_compliance_agent.py  # Capstone example
 ├── Slides/                        # Presentation decks
 └── Supporting_Materials/
-    └── Environment_Setup_Guide.md
+    ├── Environment_Setup_Guide.md
+    ├── STUDENT_GUIDE.md           # Comprehensive learner guide
+    ├── INSTRUCTOR_GUIDE.md        # Teaching tips & rubrics
+    ├── SmolAgents_Guide.md        # SmolAgents deep-dive
+    ├── Google_ADK_Guide.md        # Google ADK documentation
+    ├── A2A_Protocol_Guide.md      # Agent-to-Agent protocol guide
+    └── Understanding_Utils_Package.md
 ```
 
 ---
@@ -89,7 +95,7 @@ Agents-Workshop/
 ### 2. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Digital-Ethos-Academy/Agents-Workshop.git
 cd Agents-Workshop
 ```
 
@@ -127,11 +133,38 @@ TAVILY_API_KEY=tvly-...
 
 ### 6. Verify Installation
 
+Run the environment checker:
+
+```bash
+python check_environment.py
+```
+
+Or verify manually:
+
 ```bash
 python -c "from langchain_openai import ChatOpenAI; print('LangChain OK')"
 python -c "import autogen; print('AutoGen OK')"
 python -c "from crewai import Agent; print('CrewAI OK')"
 ```
+
+---
+
+## API Cost Estimates
+
+This workshop uses OpenAI APIs. Estimated costs per lab (using `gpt-4o-mini`):
+
+| Lab | Estimated Cost | Notes |
+|-----|---------------|-------|
+| Lab 1 | $0.10 - $0.30 | Basic tool use, few iterations |
+| Lab 2 | $0.15 - $0.40 | Multi-agent conversations |
+| Lab 3 | $0.20 - $0.50 | State graph with multiple nodes |
+| Lab 4 | $0.40 - $1.00 | Complex workflows, more tokens |
+| **Total** | **$0.85 - $2.20** | Conservative estimate |
+
+**Tips to minimize costs:**
+- Use `gpt-4o-mini` for development (10-20x cheaper than `gpt-4o`)
+- Reuse cached results during iteration
+- Set `max_tokens` to reasonable limits
 
 ---
 
@@ -147,6 +180,7 @@ python -c "from crewai import Agent; print('CrewAI OK')"
 | **LangGraph** | Complex stateful workflows | Conditional routing, cycles, checkpoints |
 | **SmolAgents** | Lightweight agents | Simple, minimal overhead |
 | **Google ADK** | Google ecosystem | Production deployment, Vertex AI |
+| **A2A Protocol** | Agent interoperability | Cross-framework communication standard |
 
 ### Decision Framework
 
@@ -208,6 +242,49 @@ See `Supporting_Materials/Environment_Setup_Guide.md` for detailed troubleshooti
 
 ---
 
+## Student Resources
+
+For a comprehensive learning guide including:
+- Lab-by-lab walkthrough
+- Key concepts glossary
+- Common pitfalls & solutions
+- Framework decision guide
+
+See **[Supporting_Materials/STUDENT_GUIDE.md](Supporting_Materials/STUDENT_GUIDE.md)**
+
+---
+
+## Next Steps After Workshop
+
+Once you've completed the workshop, consider exploring:
+
+### 1. **Streaming & Async**
+Add real-time output streaming to your agents for better UX.
+
+### 2. **Deployment**
+Deploy your agents to production using:
+- FastAPI for REST endpoints
+- Google Cloud Run for serverless
+- Modal or Railway for quick deployments
+
+### 3. **Security**
+Learn about prompt injection defenses, input validation, and secure tool design.
+
+### 4. **Observability**
+Add monitoring with [LangSmith](https://smith.langchain.com/) or similar tools to debug and improve agents.
+
+### 5. **Explore More Frameworks**
+- **SmolAgents**: See [Supporting_Materials/SmolAgents_Guide.md](Supporting_Materials/SmolAgents_Guide.md)
+- **Google ADK**: See [Supporting_Materials/Google_ADK_Guide.md](Supporting_Materials/Google_ADK_Guide.md)
+- **A2A Protocol**: See [Supporting_Materials/A2A_Protocol_Guide.md](Supporting_Materials/A2A_Protocol_Guide.md)
+
+### 6. **Enterprise Interoperability**
+Learn the A2A (Agent-to-Agent) Protocol for building agents that communicate across frameworks and organizations.
+
+---
+
 ## License
 
-These materials are licensed for workshop use. Contact your program coordinator for redistribution rights.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+You are free to use, modify, and distribute these materials with attribution.

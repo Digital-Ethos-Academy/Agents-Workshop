@@ -113,6 +113,55 @@
         .framework-card.crewai {
             border-left-color: #f6ad55;
         }
+
+        /* Print styles for PDF export */
+        @media print {
+            body {
+                background-color: white !important;
+                color: #1a202c !important;
+                font-size: 12pt;
+            }
+            header, nav {
+                display: none !important;
+            }
+            .card {
+                background-color: #f7fafc !important;
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0 !important;
+                page-break-inside: avoid;
+            }
+            .code-block, .diagram-box {
+                background-color: #f7fafc !important;
+                border: 1px solid #e2e8f0 !important;
+                color: #1a202c !important;
+            }
+            .collapsible-content {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            .accent-text, .highlight {
+                color: #2b6cb0 !important;
+            }
+            .text-gray-300, .text-gray-400, .text-gray-500 {
+                color: #4a5568 !important;
+            }
+            .section-title::after {
+                background-color: #2b6cb0 !important;
+            }
+            section {
+                page-break-inside: avoid;
+            }
+            a {
+                color: #2b6cb0 !important;
+                text-decoration: underline;
+            }
+            table {
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #e2e8f0 !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">

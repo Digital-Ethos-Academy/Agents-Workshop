@@ -42,7 +42,7 @@ python3 --version
 ## Step 2: Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Digital-Ethos-Academy/Agents-Workshop.git
 cd Agents-Workshop
 ```
 

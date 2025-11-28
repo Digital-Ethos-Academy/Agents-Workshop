@@ -561,4 +561,153 @@ __all__ = [
     "clean_llm_output",
     "prompt_enhancer",
     "prompt_enhancer_compat",
+    # Workshop helper functions
+    "get_langchain_llm",
+    "get_autogen_config",
+    "get_crewai_llm",
 ]
+
+
+# ============ Workshop Helper Functions ============
+# These functions provide simplified LLM initialization for the workshop labs
+
+def get_langchain_llm(
+    model_name: str = "gpt-4o-mini",
+    temperature: float = 0,
+    **kwargs
+):
+    """
+    Get a LangChain-compatible LLM instance.
+    
+    This is the recommended way to initialize LLMs in workshop labs.
+    It automatically loads environment variables and validates the model.
+    
+    Args:
+        model_name: The model to use (default: gpt-4o-mini for cost efficiency)
+        temperature: Sampling temperature (default: 0 for deterministic output)
+        **kwargs: Additional arguments passed to the LLM constructor
+        
+    Returns:
+        A LangChain ChatOpenAI, ChatAnthropic, or ChatGoogleGenerativeAI instance
+        
+    Example:
+        >>> from utils import get_langchain_llm
+        >>> llm = get_langchain_llm("gpt-4o-mini", temperature=0)
+        >>> response = llm.invoke("Hello!")
+    """
+    load_environment()
+    
+    if model_name not in RECOMMENDED_MODELS:
+        available = [m for m, c in RECOMMENDED_MODELS.items() if c.get("text_generation")]
+        raise ValueError(
+            f"Model '{model_name}' not found. Available text models: {available[:5]}..."
+        )
+    
+    config = RECOMMENDED_MODELS[model_name]
+    provider = config["provider"]
+    
+    if not config.get("text_generation"):
+        raise ValueError(f"Model '{model_name}' does not support text generation")
+    
+    if provider == "openai":
+        from langchain_openai import ChatOpenAI
+        return ChatOpenAI(model=model_name, temperature=temperature, **kwargs)
+    
+    elif provider == "anthropic":
+        from langchain_anthropic import ChatAnthropic
+        return ChatAnthropic(model=model_name, temperature=temperature, **kwargs)
+    
+    elif provider == "google":
+        from langchain_google_genai import ChatGoogleGenerativeAI
+        return ChatGoogleGenerativeAI(model=model_name, temperature=temperature, **kwargs)
+    
+    else:
+        raise ValueError(
+            f"Provider '{provider}' not supported for LangChain. "
+            f"Use OpenAI, Anthropic, or Google models."
+        )
+
+
+def get_autogen_config(
+    model_name: str = "gpt-4o-mini",
+    temperature: float = 0.7,
+) -> dict:
+    """
+    Get an AutoGen-compatible LLM configuration.
+    
+    This provides the config_list format required by AutoGen agents.
+    
+    Args:
+        model_name: The model to use (default: gpt-4o-mini)
+        temperature: Sampling temperature (default: 0.7 for creativity)
+        
+    Returns:
+        A dictionary with config_list and temperature for AutoGen
+        
+    Example:
+        >>> from utils import get_autogen_config
+        >>> llm_config = get_autogen_config("gpt-4o-mini")
+        >>> agent = AssistantAgent("assistant", llm_config=llm_config)
+    """
+    import os
+    load_environment()
+    
+    if model_name not in RECOMMENDED_MODELS:
+        raise ValueError(f"Model '{model_name}' not found in recommended models")
+    
+    config = RECOMMENDED_MODELS[model_name]
+    provider = config["provider"]
+    
+    if provider != "openai":
+        logger.warning(
+            f"AutoGen works best with OpenAI models. "
+            f"Model '{model_name}' uses provider '{provider}'."
+        )
+    
+    # Get the appropriate API key
+    api_key = None
+    if provider == "openai":
+        api_key = os.getenv("OPENAI_API_KEY")
+    elif provider == "anthropic":
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+    elif provider == "google":
+        api_key = os.getenv("GOOGLE_API_KEY")
+    
+    if not api_key:
+        raise ValueError(
+            f"API key not found for provider '{provider}'. "
+            f"Please set the appropriate environment variable."
+        )
+    
+    return {
+        "config_list": [{
+            "model": model_name,
+            "api_key": api_key,
+        }],
+        "temperature": temperature,
+    }
+
+
+def get_crewai_llm(
+    model_name: str = "gpt-4o-mini",
+    temperature: float = 0.7,
+):
+    """
+    Get a CrewAI-compatible LLM instance.
+    
+    CrewAI uses LangChain LLMs under the hood, so this is a convenience
+    wrapper that returns the appropriate LangChain LLM.
+    
+    Args:
+        model_name: The model to use (default: gpt-4o-mini)
+        temperature: Sampling temperature (default: 0.7)
+        
+    Returns:
+        A LangChain LLM instance compatible with CrewAI
+        
+    Example:
+        >>> from utils import get_crewai_llm
+        >>> llm = get_crewai_llm("gpt-4o-mini")
+        >>> agent = Agent(role="...", llm=llm)
+    """
+    return get_langchain_llm(model_name, temperature)

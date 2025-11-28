@@ -94,16 +94,95 @@ State = { messages: [], context: {}, ... }
 ## Other Frameworks (Brief Overview)
 
 ### SmolAgents (Hugging Face)
-- **Philosophy**: Minimal, code-focused agents
-- **Best for**: Lightweight tasks, learning agents
-- **Key feature**: Agents write and execute code directly
-- **Use when**: You want simplicity and transparency
+
+**Philosophy**: Minimal, code-focused agents that write and execute code directly.
+
+```python
+from smolagents import CodeAgent, tool
+
+@tool
+def search_web(query: str) -> str:
+    """Search the web for information."""
+    # Implementation here
+    return f"Search results for: {query}"
+
+agent = CodeAgent(tools=[search_web])
+result = agent.run("Find the latest news about AI agents")
+print(result)
+```
+
+**Best for**: Lightweight tasks, learning, HuggingFace ecosystem.
+
+📖 **Deep dive**: See [Supporting_Materials/SmolAgents_Guide.md](../../Supporting_Materials/SmolAgents_Guide.md)
 
 ### Google ADK (Agent Development Kit)
-- **Philosophy**: Production-ready, Google ecosystem
-- **Best for**: Enterprise deployment on Google Cloud
-- **Key feature**: Vertex AI integration, scalable deployment
-- **Use when**: Building for Google Cloud production
+
+**Philosophy**: Production-ready agents for Google Cloud deployment.
+
+```python
+from google.adk.agents import Agent
+from google.adk.tools import tool
+
+@tool
+def get_weather(city: str) -> str:
+    """Get current weather for a city."""
+    return f"Weather in {city}: Sunny, 72°F"
+
+agent = Agent(
+    name="weather_agent",
+    model="gemini-2.0-flash",
+    tools=[get_weather]
+)
+
+# Run locally or deploy to Cloud Run
+```
+
+**CLI Commands**:
+- `adk create my_agent` - Create new agent project
+- `adk run` - Run agent locally
+- `adk web` - Launch web UI for testing
+- `adk deploy` - Deploy to Google Cloud
+
+📖 **Deep dive**: See [Supporting_Materials/Google_ADK_Guide.md](../../Supporting_Materials/Google_ADK_Guide.md)
+
+### A2A Protocol (Agent-to-Agent)
+
+**Philosophy**: Open standard for agent interoperability across frameworks.
+
+A2A enables agents built with different frameworks (LangGraph, AutoGen, ADK, etc.) to communicate using a common protocol.
+
+**Core Concepts**:
+- **Agent Card**: JSON describing agent capabilities
+- **Tasks**: Units of work sent between agents
+- **Messages/Parts**: Structured communication format
+
+```python
+# Discovering another agent's capabilities
+import requests
+
+response = requests.get("https://agent.example.com/.well-known/agent.json")
+agent_card = response.json()
+print(f"Agent: {agent_card['name']}")
+print(f"Skills: {[s['name'] for s in agent_card['skills']]}")
+
+# Sending a task to the agent
+task_response = requests.post(
+    "https://agent.example.com/tasks",
+    json={
+        "message": {
+            "role": "user",
+            "parts": [{"type": "text", "text": "Analyze this document..."}]
+        }
+    }
+)
+```
+
+**When to use A2A**:
+- Multiple teams using different frameworks
+- Enterprise multi-agent orchestration
+- Cross-organization agent communication
+
+📖 **Deep dive**: See [Supporting_Materials/A2A_Protocol_Guide.md](../../Supporting_Materials/A2A_Protocol_Guide.md)
 
 ---
 
@@ -217,10 +296,18 @@ python -c "from langgraph.graph import StateGraph; print('LangGraph OK')"
 
 ## Resources
 
+### Official Documentation
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 - [LangGraph Tutorials](https://langchain-ai.github.io/langgraph/tutorials/)
 - [SmolAgents Guide](https://huggingface.co/docs/smolagents/)
 - [Google ADK Documentation](https://google.github.io/adk-docs/)
+- [A2A Protocol Specification](https://github.com/google-a2a/A2A)
+
+### Workshop Materials
+- [STUDENT_GUIDE.md](../../Supporting_Materials/STUDENT_GUIDE.md) - Comprehensive learner guide
+- [SmolAgents_Guide.md](../../Supporting_Materials/SmolAgents_Guide.md) - SmolAgents deep-dive
+- [Google_ADK_Guide.md](../../Supporting_Materials/Google_ADK_Guide.md) - ADK documentation
+- [A2A_Protocol_Guide.md](../../Supporting_Materials/A2A_Protocol_Guide.md) - A2A protocol guide
 
 ---
 
