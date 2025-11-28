@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 2: Advanced Agent Patterns</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #63b3ed;
+            border-radius: 9999px;
+        }
+        .card {
+            background-color: #2d3748;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            font-weight: 600;
+            color: #90cdf4;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapsible-content.open {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .code-block {
+            background-color: #232d3a;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.9em;
+            color: #a0aec0;
+        }
+        .highlight {
+            color: #4fd1c5;
+        }
+        .accent-text {
+            color: #63b3ed;
+        }
+        .spark-creativity {
+            background-color: #3a4a5c;
+            border-left: 4px solid #f6ad55;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            color: #cbd5e0;
+        }
+        .syntax-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .syntax-list li {
+            position: relative;
+            padding-left: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        .syntax-list li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: #4fd1c5;
+            font-weight: bold;
+        }
+        .diagram-box {
+            background-color: #232d3a;
+            border: 1px solid #4a5568;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .framework-card {
+            background-color: #2d3748;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border-left: 3px solid #63b3ed;
+        }
+        .framework-card.langgraph {
+            border-left-color: #9f7aea;
+        }
+        .framework-card.smolagents {
+            border-left-color: #48bb78;
+        }
+        .framework-card.adk {
+            border-left-color: #f6ad55;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-gray-800 p-4 sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white"><span class="accent-text">Crafting Custom Agents</span> Workshop</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#intro" class="text-gray-300 hover:text-white transition duration-300">Intro</a></li>
+                    <li><a href="#langgraph" class="text-gray-300 hover:text-white transition duration-300">LangGraph</a></li>
+                    <li><a href="#lab3" class="text-gray-300 hover:text-white transition duration-300">Lab 3</a></li>
+                    <li><a href="#frameworks" class="text-gray-300 hover:text-white transition duration-300">Frameworks</a></li>
+                    <li><a href="#selection" class="text-gray-300 hover:text-white transition duration-300">Selection</a></li>
+                    <li><a href="#capstone" class="text-gray-300 hover:text-white transition duration-300">Capstone</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6">
+        <!-- Title Section -->
+        <section id="session2-intro" class="text-center my-10">
+            <h2 class="text-5xl font-extrabold text-white mb-4">Session 2: Advanced Agent Patterns</h2>
+            <p class="text-xl text-gray-400">
+                <span class="accent-text">Theme:</span> Stateful workflows, framework selection, and building production-ready agents
+            </p>
+            <p class="text-lg text-gray-400 mt-2">
+                <span class="accent-text">Core Question:</span> How do we build complex, controllable agent workflows?
+            </p>
+            <p class="text-md text-gray-500 mt-4">Duration: 3 hours | Format: 80% hands-on, 20% lecture</p>
+        </section>
+
+        <!-- Agenda Overview -->
+        <section id="intro" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Session Agenda</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="py-3 px-4 text-accent-text">Time</th>
+                            <th class="py-3 px-4 text-accent-text">Activity</th>
+                            <th class="py-3 px-4 text-accent-text">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">0:00-0:30</td>
+                            <td class="py-3 px-4 font-semibold">Advanced Frameworks</td>
+                            <td class="py-3 px-4">LangGraph intro, SmolAgents demo, ADK overview</td>
+                        </tr>
+                        <tr class="border-b border-gray-700 bg-gray-800">
+                            <td class="py-3 px-4">0:30-1:15</td>
+                            <td class="py-3 px-4 font-semibold highlight">Lab 3: LangGraph Workflows</td>
+                            <td class="py-3 px-4">Build stateful agent with conditional routing</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">1:15-1:30</td>
+                            <td class="py-3 px-4">Break</td>
+                            <td class="py-3 px-4">-</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">1:30-1:45</td>
+                            <td class="py-3 px-4 font-semibold">Framework Selection Guide</td>
+                            <td class="py-3 px-4">Decision framework, choosing for your use case</td>
+                        </tr>
+                        <tr class="border-b border-gray-700 bg-gray-800">
+                            <td class="py-3 px-4">1:45-2:30</td>
+                            <td class="py-3 px-4 font-semibold highlight">Lab 4: Capstone Project</td>
+                            <td class="py-3 px-4">Build your own agent with framework of choice</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4">2:30-3:00</td>
+                            <td class="py-3 px-4 font-semibold">Demo & Wrap-up</td>
+                            <td class="py-3 px-4">Participants demo their agents</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Why LangGraph -->
+        <section id="langgraph" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Why LangGraph?</h3>
+            <p class="text-gray-300 mb-6">
+                <span class="accent-text">LangGraph</span> addresses the limitations of simple ReAct agents by providing graph-based workflows with explicit state management.
+            </p>
+
+            <div class="overflow-x-auto mb-6">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="py-3 px-4 text-red-400">Simple ReAct Agent</th>
+                            <th class="py-3 px-4 text-green-400">LangGraph</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Linear execution</td>
+                            <td class="py-3 px-4">Graph-based workflows</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Implicit state</td>
+                            <td class="py-3 px-4">Explicit state management</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Hard to debug</td>
+                            <td class="py-3 px-4">Visual, traceable flow</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">No persistence</td>
+                            <td class="py-3 px-4">Built-in checkpointing</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4">Limited control</td>
+                            <td class="py-3 px-4">Fine-grained routing</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spark-creativity">
+                <h4 class="font-semibold text-white mb-2">Payments Example: Settlement Workflow</h4>
+                <p>A settlement processing workflow needs:</p>
+                <ul class="syntax-list mt-2">
+                    <li>Multiple approval gates (compliance, finance, operations)</li>
+                    <li>Conditional routing based on settlement amount</li>
+                    <li>State persistence across business days</li>
+                    <li>Human-in-the-loop for large settlements</li>
+                </ul>
+                <p class="mt-2">LangGraph handles all of this elegantly with its graph structure.</p>
+            </div>
+        </section>
+
+        <!-- LangGraph Core Concepts -->
+        <section class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">LangGraph Core Concepts</h3>
+
+            <div class="diagram-box text-center mb-6">
+                     StateGraph
+    ┌─────────────────────────────────────────┐
+    │                                         │
+    │   START                                 │
+    │     │                                   │
+    │     ▼                                   │
+    │  ┌──────────┐                           │
+    │  │ classify │ ────► "urgent"            │
+    │  └──────────┘          │                │
+    │       │                ▼                │
+    │   "normal"      ┌────────────┐          │
+    │       │         │ fast_track │          │
+    │       ▼         └────────────┘          │
+    │  ┌──────────┐          │                │
+    │  │ standard │          │                │
+    │  └──────────┘          │                │
+    │       │                │                │
+    │       └──────┬─────────┘                │
+    │              ▼                          │
+    │           ┌─────┐                       │
+    │           │ END │                       │
+    │           └─────┘                       │
+    └─────────────────────────────────────────┘
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="text-xl font-semibold text-purple-400 mb-3">1. State</h4>
+                    <p class="text-gray-300 mb-2">A TypedDict that flows through the graph</p>
+                    <div class="code-block text-sm">
+<span class="text-purple-400">from</span> typing <span class="text-purple-400">import</span> TypedDict
+
+<span class="text-purple-400">class</span> <span class="text-yellow-400">SettlementState</span>(TypedDict):
+    transaction_id: <span class="text-green-400">str</span>
+    amount: <span class="text-green-400">float</span>
+    status: <span class="text-green-400">str</span>
+    approvals: <span class="text-green-400">list</span>
+    messages: <span class="text-green-400">list</span>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="text-xl font-semibold text-purple-400 mb-3">2. Nodes</h4>
+                    <p class="text-gray-300 mb-2">Functions that process and update state</p>
+                    <div class="code-block text-sm">
+<span class="text-purple-400">def</span> <span class="text-yellow-400">classify_transaction</span>(state):
+    <span class="text-gray-500"># Analyze and classify</span>
+    <span class="text-purple-400">if</span> state[<span class="text-green-400">"amount"</span>] > <span class="text-orange-400">10000</span>:
+        <span class="text-purple-400">return</span> {<span class="text-green-400">"status"</span>: <span class="text-green-400">"high_value"</span>}
+    <span class="text-purple-400">return</span> {<span class="text-green-400">"status"</span>: <span class="text-green-400">"standard"</span>}
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="text-xl font-semibold text-purple-400 mb-3">3. Edges</h4>
+                    <p class="text-gray-300 mb-2">Connections between nodes (can be conditional)</p>
+                    <div class="code-block text-sm">
+<span class="text-gray-500"># Simple edge</span>
+graph.add_edge(<span class="text-green-400">"classify"</span>, <span class="text-green-400">"process"</span>)
+
+<span class="text-gray-500"># Conditional edge</span>
+graph.add_conditional_edges(
+    <span class="text-green-400">"classify"</span>,
+    route_by_status,  <span class="text-gray-500"># routing function</span>
+    {<span class="text-green-400">"high"</span>: <span class="text-green-400">"review"</span>, <span class="text-green-400">"low"</span>: <span class="text-green-400">"auto_approve"</span>}
+)
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="text-xl font-semibold text-purple-400 mb-3">4. Checkpoints</h4>
+                    <p class="text-gray-300 mb-2">Saved state for persistence/resumption</p>
+                    <div class="code-block text-sm">
+<span class="text-purple-400">from</span> langgraph.checkpoint.memory <span class="text-purple-400">import</span> MemorySaver
+
+checkpointer = MemorySaver()
+app = graph.compile(checkpointer=checkpointer)
+
+<span class="text-gray-500"># Resume from checkpoint</span>
+state = app.get_state(thread_id=<span class="text-green-400">"txn-123"</span>)
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible-header mt-6" onclick="toggleCollapsible(this)">
+                <span>View Full LangGraph Example</span>
+                <span class="transform transition-transform">+</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="code-block mt-4">
+<span class="text-purple-400">from</span> typing <span class="text-purple-400">import</span> TypedDict
+<span class="text-purple-400">from</span> langgraph.graph <span class="text-purple-400">import</span> StateGraph, END
+
+<span class="text-gray-500"># 1. Define State</span>
+<span class="text-purple-400">class</span> <span class="text-yellow-400">SettlementState</span>(TypedDict):
+    transaction_id: <span class="text-green-400">str</span>
+    amount: <span class="text-green-400">float</span>
+    status: <span class="text-green-400">str</span>
+    approval_status: <span class="text-green-400">str</span>
+
+<span class="text-gray-500"># 2. Define Nodes</span>
+<span class="text-purple-400">def</span> <span class="text-yellow-400">classify</span>(state: SettlementState) -> <span class="text-green-400">dict</span>:
+    <span class="text-purple-400">if</span> state[<span class="text-green-400">"amount"</span>] > <span class="text-orange-400">50000</span>:
+        <span class="text-purple-400">return</span> {<span class="text-green-400">"status"</span>: <span class="text-green-400">"high_value"</span>}
+    <span class="text-purple-400">return</span> {<span class="text-green-400">"status"</span>: <span class="text-green-400">"standard"</span>}
+
+<span class="text-purple-400">def</span> <span class="text-yellow-400">require_approval</span>(state: SettlementState) -> <span class="text-green-400">dict</span>:
+    <span class="text-gray-500"># Would integrate with approval system</span>
+    <span class="text-purple-400">return</span> {<span class="text-green-400">"approval_status"</span>: <span class="text-green-400">"pending_review"</span>}
+
+<span class="text-purple-400">def</span> <span class="text-yellow-400">auto_approve</span>(state: SettlementState) -> <span class="text-green-400">dict</span>:
+    <span class="text-purple-400">return</span> {<span class="text-green-400">"approval_status"</span>: <span class="text-green-400">"approved"</span>}
+
+<span class="text-gray-500"># 3. Routing Function</span>
+<span class="text-purple-400">def</span> <span class="text-yellow-400">route_by_value</span>(state: SettlementState) -> <span class="text-green-400">str</span>:
+    <span class="text-purple-400">if</span> state[<span class="text-green-400">"status"</span>] == <span class="text-green-400">"high_value"</span>:
+        <span class="text-purple-400">return</span> <span class="text-green-400">"require_approval"</span>
+    <span class="text-purple-400">return</span> <span class="text-green-400">"auto_approve"</span>
+
+<span class="text-gray-500"># 4. Build Graph</span>
+graph = StateGraph(SettlementState)
+
+graph.add_node(<span class="text-green-400">"classify"</span>, classify)
+graph.add_node(<span class="text-green-400">"require_approval"</span>, require_approval)
+graph.add_node(<span class="text-green-400">"auto_approve"</span>, auto_approve)
+
+graph.set_entry_point(<span class="text-green-400">"classify"</span>)
+graph.add_conditional_edges(<span class="text-green-400">"classify"</span>, route_by_value)
+graph.add_edge(<span class="text-green-400">"require_approval"</span>, END)
+graph.add_edge(<span class="text-green-400">"auto_approve"</span>, END)
+
+<span class="text-gray-500"># 5. Compile and Run</span>
+app = graph.compile()
+result = app.invoke({
+    <span class="text-green-400">"transaction_id"</span>: <span class="text-green-400">"TXN-001"</span>,
+    <span class="text-green-400">"amount"</span>: <span class="text-orange-400">75000</span>,
+    <span class="text-green-400">"status"</span>: <span class="text-green-400">""</span>,
+    <span class="text-green-400">"approval_status"</span>: <span class="text-green-400">""</span>
+})
+<span class="text-gray-500"># result["approval_status"] == "pending_review"</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lab 3 Transition -->
+        <section id="lab3" class="my-12 card bg-gradient-to-r from-purple-900 to-purple-800">
+            <h3 class="text-3xl font-bold text-white mb-4">Lab 3: LangGraph Workflows</h3>
+            <p class="text-xl text-purple-200 mb-4">Time: 45 minutes</p>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg mb-4">
+                <h4 class="font-semibold text-white mb-3">What You'll Build</h4>
+                <p class="text-gray-300 mb-3">A <span class="highlight">Document Processing Workflow</span> with:</p>
+                <ul class="syntax-list text-gray-300">
+                    <li>State management using TypedDict</li>
+                    <li>Conditional routing based on document type</li>
+                    <li>Multiple processing paths</li>
+                    <li>Checkpointing for resumable workflows</li>
+                </ul>
+            </div>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg">
+                <h4 class="font-semibold text-white mb-3">Key Learnings</h4>
+                <ul class="syntax-list text-gray-300">
+                    <li>Creating <code class="bg-gray-700 px-1 rounded">StateGraph</code> with TypedDict state</li>
+                    <li>Adding nodes and edges</li>
+                    <li>Implementing conditional routing</li>
+                    <li>Using checkpoints with <code class="bg-gray-700 px-1 rounded">MemorySaver</code></li>
+                    <li>Human-in-the-loop patterns</li>
+                </ul>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-xl text-white">Open: <code class="bg-gray-700 px-2 py-1 rounded">Labs/Session_2/Lab_3_LangGraph_Workflows.ipynb</code></p>
+            </div>
+        </section>
+
+        <!-- Break -->
+        <section class="my-12 text-center py-8">
+            <h3 class="text-2xl font-bold text-gray-400">☕ Break (15 minutes)</h3>
+        </section>
+
+        <!-- Other Frameworks -->
+        <section id="frameworks" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Other Frameworks Overview</h3>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="framework-card smolagents">
+                    <h4 class="text-xl font-semibold text-green-400 mb-3">SmolAgents (Hugging Face)</h4>
+                    <p class="text-gray-300 mb-3">Minimal, code-focused agents with transparency and simplicity.</p>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li><strong>Philosophy:</strong> Agents write and execute code directly</li>
+                        <li><strong>Best for:</strong> Lightweight tasks, learning, prototyping</li>
+                        <li><strong>Key feature:</strong> Code as the action language</li>
+                        <li><strong>Overhead:</strong> Very low</li>
+                    </ul>
+                    <div class="code-block mt-3 text-sm">
+<span class="text-purple-400">from</span> smolagents <span class="text-purple-400">import</span> CodeAgent, tool
+
+<span class="text-blue-400">@tool</span>
+<span class="text-purple-400">def</span> <span class="text-yellow-400">calculate</span>(expression: <span class="text-green-400">str</span>) -> <span class="text-green-400">float</span>:
+    <span class="text-purple-400">return</span> eval(expression)
+
+agent = CodeAgent(tools=[calculate])
+agent.run(<span class="text-green-400">"What is 15% of 250?"</span>)
+                    </div>
+                </div>
+
+                <div class="framework-card adk">
+                    <h4 class="text-xl font-semibold text-orange-400 mb-3">Google ADK</h4>
+                    <p class="text-gray-300 mb-3">Production-ready agent framework for Google Cloud ecosystem.</p>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li><strong>Philosophy:</strong> Enterprise-grade, scalable deployment</li>
+                        <li><strong>Best for:</strong> Production on Google Cloud/Vertex AI</li>
+                        <li><strong>Key feature:</strong> Native GCP integration</li>
+                        <li><strong>Overhead:</strong> Higher (cloud infrastructure)</li>
+                    </ul>
+                    <div class="code-block mt-3 text-sm">
+<span class="text-purple-400">from</span> google.adk <span class="text-purple-400">import</span> Agent
+
+agent = Agent(
+    model=<span class="text-green-400">"gemini-pro"</span>,
+    tools=[...],
+    deployment_config={<span class="text-green-400">"region"</span>: <span class="text-green-400">"us-central1"</span>}
+)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Framework Selection Guide -->
+        <section id="selection" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Framework Selection Guide</h3>
+
+            <h4 class="text-xl font-semibold text-accent-text mb-4">Decision Tree</h4>
+
+            <div class="diagram-box mb-6">
+                              Start
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+        ▼                       ▼                       ▼
+   Single agent          Multi-agent            Complex workflow
+   with tools?           collaboration?          with state?
+        │                       │                       │
+        ▼                       ▼                       ▼
+   ┌─────────┐           ┌───────────┐           ┌─────────┐
+   │LangChain│           │ AutoGen / │           │LangGraph│
+   │ Agents  │           │  CrewAI   │           │         │
+   └─────────┘           └───────────┘           └─────────┘
+        │                       │
+        │                       │
+        ▼                       ▼
+   Need minimal          Need conversation
+   overhead?             between agents?
+        │                       │
+        ▼                       ▼
+   ┌─────────┐           ┌─────────┐
+   │SmolAgent│           │ AutoGen │
+   └─────────┘           └─────────┘
+
+                Role-based pipeline? ──► CrewAI
+                Google Cloud deploy? ──► Google ADK
+            </div>
+
+            <h4 class="text-xl font-semibold text-accent-text mb-4">Quick Reference</h4>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="py-3 px-4 text-accent-text">Use Case</th>
+                            <th class="py-3 px-4 text-accent-text">Recommended</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Simple tool-using agent</td>
+                            <td class="py-3 px-4 text-blue-400">LangChain</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Research/writing pipeline</td>
+                            <td class="py-3 px-4 text-orange-400">CrewAI</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Code generation with execution</td>
+                            <td class="py-3 px-4 text-teal-400">AutoGen</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Customer support chat</td>
+                            <td class="py-3 px-4 text-teal-400">AutoGen</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Document processing workflow</td>
+                            <td class="py-3 px-4 text-purple-400">LangGraph</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Approval workflows</td>
+                            <td class="py-3 px-4 text-purple-400">LangGraph</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">Learning/prototyping</td>
+                            <td class="py-3 px-4 text-green-400">SmolAgents</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4">Production on GCP</td>
+                            <td class="py-3 px-4 text-yellow-400">Google ADK</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spark-creativity mt-6">
+                <h4 class="font-semibold text-white mb-2">Payments Framework Recommendations</h4>
+                <ul class="syntax-list">
+                    <li><strong>Fraud Detection Agent:</strong> LangChain (single agent, multiple tools)</li>
+                    <li><strong>Compliance Review Team:</strong> CrewAI (role-based: researcher, analyst, reporter)</li>
+                    <li><strong>Settlement Processing:</strong> LangGraph (stateful workflow with approvals)</li>
+                    <li><strong>Customer Dispute Resolution:</strong> AutoGen (conversational with human-in-loop)</li>
+                    <li><strong>Transaction Analytics:</strong> SmolAgents (code-based data analysis)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Capstone Project -->
+        <section id="capstone" class="my-12 card bg-gradient-to-r from-orange-900 to-orange-800">
+            <h3 class="text-3xl font-bold text-white mb-4">Lab 4: Capstone Project</h3>
+            <p class="text-xl text-orange-200 mb-4">Time: 45 minutes</p>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg mb-4">
+                <h4 class="font-semibold text-white mb-3">Project Requirements</h4>
+                <ul class="syntax-list text-gray-300">
+                    <li><strong>Functional Agent:</strong> Must perform a useful task end-to-end</li>
+                    <li><strong>Multiple Tools:</strong> At least 2-3 custom tools</li>
+                    <li><strong>Framework Choice:</strong> Use any framework from the workshop</li>
+                    <li><strong>Demo Ready:</strong> Be prepared to demo in 2-3 minutes</li>
+                </ul>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                    <h4 class="font-semibold text-white mb-2">Project Ideas</h4>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li><strong>Code Assistant:</strong> Analyze, explain, improve code</li>
+                        <li><strong>Research Agent:</strong> Search, synthesize, report</li>
+                        <li><strong>Data Analyst:</strong> Process CSV, calculate stats</li>
+                        <li><strong>Meeting Assistant:</strong> Summarize, extract actions</li>
+                    </ul>
+                </div>
+                <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                    <h4 class="font-semibold text-white mb-2">Payments-Specific Ideas</h4>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li><strong>Fraud Analyst:</strong> Transaction pattern analysis</li>
+                        <li><strong>Reconciliation Bot:</strong> Match and report discrepancies</li>
+                        <li><strong>Compliance Checker:</strong> Validate against regulations</li>
+                        <li><strong>Dispute Resolver:</strong> Research and recommend</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg">
+                <h4 class="font-semibold text-white mb-3">Evaluation Criteria</h4>
+                <div class="grid md:grid-cols-5 gap-2 text-center">
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="text-2xl mb-1">🎯</p>
+                        <p class="text-sm text-gray-300">Goal Achievement</p>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="text-2xl mb-1">🔧</p>
+                        <p class="text-sm text-gray-300">Tool Design</p>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="text-2xl mb-1">📝</p>
+                        <p class="text-sm text-gray-300">Code Quality</p>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="text-2xl mb-1">⚠️</p>
+                        <p class="text-sm text-gray-300">Error Handling</p>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="text-2xl mb-1">🎬</p>
+                        <p class="text-sm text-gray-300">Demo Quality</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-xl text-white">Open: <code class="bg-gray-700 px-2 py-1 rounded">Labs/Session_2/Lab_4_Capstone_Build_Your_Agent.ipynb</code></p>
+            </div>
+        </section>
+
+        <!-- Demo Time -->
+        <section class="my-12 card bg-gradient-to-r from-green-900 to-green-800">
+            <h3 class="text-3xl font-bold text-white mb-4">Demo Time!</h3>
+            <p class="text-xl text-green-200 mb-4">Time: 30 minutes</p>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg">
+                <h4 class="font-semibold text-white mb-3">Demo Guidelines</h4>
+                <ul class="syntax-list text-gray-300">
+                    <li><strong>Time:</strong> 2-3 minutes per demo</li>
+                    <li><strong>Format:</strong> Show your agent in action</li>
+                    <li><strong>Explain:</strong> What framework you chose and why</li>
+                    <li><strong>Share:</strong> One challenge you faced and how you solved it</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Workshop Wrap-up -->
+        <section class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Workshop Recap</h3>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-xl font-semibold text-accent-text mb-3">What You Learned</h4>
+                    <ul class="syntax-list text-gray-300">
+                        <li>ReAct loop and agent fundamentals</li>
+                        <li>Building tools with LangChain's <code class="bg-gray-700 px-1 rounded">@tool</code></li>
+                        <li>Multi-agent systems with AutoGen & CrewAI</li>
+                        <li>Stateful workflows with LangGraph</li>
+                        <li>Framework selection for different use cases</li>
+                        <li>Building production-ready agents</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-semibold text-accent-text mb-3">Frameworks Covered</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-blue-400 rounded-full mr-2"></span>
+                            <span>LangChain - Single agents with tools</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-teal-400 rounded-full mr-2"></span>
+                            <span>AutoGen - Conversational multi-agent</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-orange-400 rounded-full mr-2"></span>
+                            <span>CrewAI - Role-based collaboration</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-purple-400 rounded-full mr-2"></span>
+                            <span>LangGraph - Stateful workflows</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-green-400 rounded-full mr-2"></span>
+                            <span>SmolAgents - Lightweight agents</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
+                            <span>Google ADK - Enterprise deployment</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-gray-800 rounded-lg">
+                <h4 class="font-semibold text-accent-text mb-3">Next Steps</h4>
+                <ul class="syntax-list text-gray-300">
+                    <li>Explore the documentation for your preferred framework</li>
+                    <li>Build agents for real problems in your domain</li>
+                    <li>Consider production concerns: logging, monitoring, cost</li>
+                    <li>Check out the MCP Workshop for protocol-based tool integration</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Resources</h3>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="font-semibold text-accent-text mb-2">Documentation</h4>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li><a href="https://python.langchain.com/docs/" class="text-blue-400 hover:underline">LangChain Docs</a></li>
+                        <li><a href="https://langchain-ai.github.io/langgraph/" class="text-purple-400 hover:underline">LangGraph Guide</a></li>
+                        <li><a href="https://microsoft.github.io/autogen/" class="text-teal-400 hover:underline">AutoGen Docs</a></li>
+                        <li><a href="https://docs.crewai.com/" class="text-orange-400 hover:underline">CrewAI Docs</a></li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="font-semibold text-accent-text mb-2">Additional Resources</h4>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li><a href="https://huggingface.co/docs/smolagents/" class="text-green-400 hover:underline">SmolAgents Guide</a></li>
+                        <li><a href="https://google.github.io/adk-docs/" class="text-yellow-400 hover:underline">Google ADK</a></li>
+                        <li><a href="https://arxiv.org/abs/2210.03629" class="text-gray-400 hover:underline">ReAct Paper</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Thank You -->
+        <section class="my-12 text-center py-8 card bg-gradient-to-r from-blue-900 to-purple-900">
+            <h3 class="text-3xl font-bold text-white mb-4">Thank You!</h3>
+            <p class="text-xl text-blue-200">Questions? Feedback?</p>
+            <p class="text-gray-400 mt-4">Good luck building your agents!</p>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 p-6 mt-12">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>Crafting Custom Agents Workshop | Session 2: Advanced Agent Patterns</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleCollapsible(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('span:last-child');
+            content.classList.toggle('open');
+            icon.textContent = content.classList.contains('open') ? '−' : '+';
+        }
+    </script>
+</body>
+</html>

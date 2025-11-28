@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 1: Agent Foundations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #63b3ed;
+            border-radius: 9999px;
+        }
+        .card {
+            background-color: #2d3748;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            font-weight: 600;
+            color: #90cdf4;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .collapsible-content.open {
+            max-height: 5000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .code-block {
+            background-color: #232d3a;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.9em;
+            color: #a0aec0;
+        }
+        .highlight {
+            color: #4fd1c5;
+        }
+        .accent-text {
+            color: #63b3ed;
+        }
+        .spark-creativity {
+            background-color: #3a4a5c;
+            border-left: 4px solid #f6ad55;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            color: #cbd5e0;
+        }
+        .syntax-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .syntax-list li {
+            position: relative;
+            padding-left: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        .syntax-list li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: #4fd1c5;
+            font-weight: bold;
+        }
+        .diagram-box {
+            background-color: #232d3a;
+            border: 1px solid #4a5568;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .framework-card {
+            background-color: #2d3748;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border-left: 3px solid #63b3ed;
+        }
+        .framework-card.autogen {
+            border-left-color: #4fd1c5;
+        }
+        .framework-card.crewai {
+            border-left-color: #f6ad55;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-gray-800 p-4 sticky top-0 z-50 shadow-xl">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white"><span class="accent-text">Crafting Custom Agents</span> Workshop</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#intro" class="text-gray-300 hover:text-white transition duration-300">Intro</a></li>
+                    <li><a href="#react-loop" class="text-gray-300 hover:text-white transition duration-300">ReAct Loop</a></li>
+                    <li><a href="#langchain" class="text-gray-300 hover:text-white transition duration-300">LangChain</a></li>
+                    <li><a href="#lab1" class="text-gray-300 hover:text-white transition duration-300">Lab 1</a></li>
+                    <li><a href="#multi-agent" class="text-gray-300 hover:text-white transition duration-300">Multi-Agent</a></li>
+                    <li><a href="#lab2" class="text-gray-300 hover:text-white transition duration-300">Lab 2</a></li>
+                    <li><a href="#comparison" class="text-gray-300 hover:text-white transition duration-300">Comparison</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-6">
+        <!-- Title Section -->
+        <section id="session1-intro" class="text-center my-10">
+            <h2 class="text-5xl font-extrabold text-white mb-4">Session 1: Agent Foundations</h2>
+            <p class="text-xl text-gray-400">
+                <span class="accent-text">Theme:</span> Understanding and building AI agents from the ground up
+            </p>
+            <p class="text-lg text-gray-400 mt-2">
+                <span class="accent-text">Core Question:</span> How do AI agents reason, act, and learn from their environment?
+            </p>
+            <p class="text-md text-gray-500 mt-4">Duration: 3 hours | Format: 80% hands-on, 20% lecture</p>
+        </section>
+
+        <!-- Agenda Overview -->
+        <section id="intro" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Session Agenda</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="py-3 px-4 text-accent-text">Time</th>
+                            <th class="py-3 px-4 text-accent-text">Activity</th>
+                            <th class="py-3 px-4 text-accent-text">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">0:00-0:30</td>
+                            <td class="py-3 px-4 font-semibold">Introduction to AI Agents</td>
+                            <td class="py-3 px-4">ReAct loop, tool use, when to use agents</td>
+                        </tr>
+                        <tr class="border-b border-gray-700 bg-gray-800">
+                            <td class="py-3 px-4">0:30-1:15</td>
+                            <td class="py-3 px-4 font-semibold highlight">Lab 1: LangChain Agents</td>
+                            <td class="py-3 px-4">Build tool-using agent with custom tools and memory</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">1:15-1:30</td>
+                            <td class="py-3 px-4">Break</td>
+                            <td class="py-3 px-4">-</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4">1:30-1:45</td>
+                            <td class="py-3 px-4 font-semibold">Multi-Agent Systems Intro</td>
+                            <td class="py-3 px-4">Patterns: sequential, hierarchical, collaborative</td>
+                        </tr>
+                        <tr class="border-b border-gray-700 bg-gray-800">
+                            <td class="py-3 px-4">1:45-2:30</td>
+                            <td class="py-3 px-4 font-semibold highlight">Lab 2: AutoGen & CrewAI</td>
+                            <td class="py-3 px-4">Build multi-agent systems, compare approaches</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4">2:30-3:00</td>
+                            <td class="py-3 px-4 font-semibold">Framework Comparison</td>
+                            <td class="py-3 px-4">When to use what, trade-offs, Q&A</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- What is an AI Agent -->
+        <section id="react-loop" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">What is an AI Agent?</h3>
+            <p class="text-gray-300 mb-6">
+                An AI agent is an <span class="accent-text">LLM-powered system</span> that goes beyond simple question-answering. Unlike a basic chatbot that responds to queries directly, an agent can <span class="highlight">reason, plan, use tools, and iterate</span> until a task is complete.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="text-xl font-semibold text-accent-text mb-3">Simple LLM Call</h4>
+                    <ul class="syntax-list text-gray-300">
+                        <li>User sends prompt</li>
+                        <li>LLM generates response</li>
+                        <li>Single turn, no tools</li>
+                        <li>No iteration or planning</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg border border-teal-500">
+                    <h4 class="text-xl font-semibold highlight mb-3">AI Agent</h4>
+                    <ul class="syntax-list text-gray-300">
+                        <li><strong>Reason</strong> about tasks and plan steps</li>
+                        <li><strong>Act</strong> using tools (APIs, databases, code)</li>
+                        <li><strong>Observe</strong> results and adjust approach</li>
+                        <li><strong>Iterate</strong> until the task is complete</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="spark-creativity">
+                <h4 class="font-semibold text-white mb-2">Payments Industry Example</h4>
+                <p>Consider a <span class="highlight">Transaction Analysis Agent</span> at a payments company. When asked "Analyze transactions for merchant ID 12345 from last week," it doesn't just generate text - it:</p>
+                <ul class="syntax-list mt-2">
+                    <li>Queries the transaction database</li>
+                    <li>Calculates statistics and identifies patterns</li>
+                    <li>Flags suspicious activity based on rules</li>
+                    <li>Generates a detailed report with recommendations</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- The ReAct Loop -->
+        <section class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">The ReAct Loop</h3>
+            <p class="text-gray-300 mb-6">
+                <span class="accent-text">ReAct</span> (Reason + Act) is the core pattern that powers most AI agents. The agent alternates between thinking about what to do and taking actions.
+            </p>
+
+            <div class="diagram-box text-center mb-6">
+    User Query
+        |
+        v
+   +----------+
+   |  REASON  |  <-- "What should I do to solve this?"
+   +----+-----+
+        |
+        v
+   +----------+
+   |   ACT    |  <-- Call a tool (search, calculate, query DB)
+   +----+-----+
+        |
+        v
+   +----------+
+   |  OBSERVE |  <-- "What did the tool return?"
+   +----+-----+
+        |
+        v
+     Done? --No--> Loop back to REASON
+        |
+       Yes
+        |
+        v
+   Final Response
+            </div>
+
+            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                <span>View ReAct in Action: Fraud Detection Example</span>
+                <span class="transform transition-transform">+</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="code-block mt-4">
+<span class="text-blue-400">User:</span> "Check if transaction TX-789 is potentially fraudulent"
+
+<span class="text-yellow-400">REASON:</span> I need to look up the transaction details first.
+<span class="text-green-400">ACT:</span> get_transaction(id="TX-789")
+<span class="text-purple-400">OBSERVE:</span> {amount: $5000, merchant: "Luxury Goods", location: "Nigeria", time: "3:00 AM"}
+
+<span class="text-yellow-400">REASON:</span> High amount, unusual merchant category, foreign location, odd time.
+         I should check the customer's transaction history.
+<span class="text-green-400">ACT:</span> get_customer_history(customer_id="C-456")
+<span class="text-purple-400">OBSERVE:</span> {avg_transaction: $150, usual_locations: ["US"], typical_merchants: ["Grocery", "Gas"]}
+
+<span class="text-yellow-400">REASON:</span> This transaction deviates significantly from normal patterns.
+         Amount is 33x average, new location, new merchant type, unusual hour.
+         I should flag this for review.
+<span class="text-green-400">ACT:</span> flag_for_review(transaction_id="TX-789", risk_score=0.92, reasons=[...])
+<span class="text-purple-400">OBSERVE:</span> {status: "flagged", review_queue: "high_priority"}
+
+<span class="text-yellow-400">REASON:</span> Task complete. I've analyzed and flagged the suspicious transaction.
+
+<span class="text-blue-400">Agent:</span> "Transaction TX-789 has been flagged as potentially fraudulent (risk score: 92%).
+        Key concerns: amount 33x above average, unusual location (Nigeria vs typical US),
+        new merchant category, and transaction occurred at 3:00 AM."
+                </div>
+            </div>
+        </section>
+
+        <!-- When to Use Agents -->
+        <section class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">When to Use Agents</h3>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-green-900 bg-opacity-30 p-5 rounded-lg border border-green-600">
+                    <h4 class="text-xl font-semibold text-green-400 mb-3">Good Use Cases</h4>
+                    <ul class="syntax-list text-gray-300">
+                        <li>Tasks requiring <strong>multiple steps</strong> with decisions</li>
+                        <li><strong>Dynamic tool selection</strong> based on context</li>
+                        <li>Complex reasoning with <strong>external data</strong></li>
+                        <li>Tasks where the <strong>path isn't predetermined</strong></li>
+                        <li>Research and analysis workflows</li>
+                        <li>Customer support with system access</li>
+                    </ul>
+                </div>
+                <div class="bg-red-900 bg-opacity-30 p-5 rounded-lg border border-red-600">
+                    <h4 class="text-xl font-semibold text-red-400 mb-3">Avoid Agents When</h4>
+                    <ul class="syntax-list text-gray-300">
+                        <li>Workflow is <strong>fixed and predictable</strong></li>
+                        <li>Simple input -> output transformations</li>
+                        <li><strong>Real-time latency</strong> is critical</li>
+                        <li>You need <strong>100% deterministic</strong> behavior</li>
+                        <li>Cost per request is a major concern</li>
+                        <li>Simple CRUD operations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="spark-creativity mt-6">
+                <h4 class="font-semibold text-white mb-2">Payments Decision Framework</h4>
+                <p class="mb-3">At a payments company, consider using agents for:</p>
+                <ul class="syntax-list">
+                    <li><strong>Fraud Investigation:</strong> Multi-step analysis of transaction patterns</li>
+                    <li><strong>Compliance Review:</strong> Gathering evidence from multiple systems</li>
+                    <li><strong>Customer Disputes:</strong> Researching and resolving chargebacks</li>
+                </ul>
+                <p class="mt-3">Avoid agents for:</p>
+                <ul class="syntax-list">
+                    <li><strong>Transaction Authorization:</strong> Needs sub-second latency</li>
+                    <li><strong>Balance Lookups:</strong> Simple database query, no reasoning needed</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LangChain Overview -->
+        <section id="langchain" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">LangChain Agents Overview</h3>
+            <p class="text-gray-300 mb-6">
+                <span class="accent-text">LangChain</span> is one of the most popular frameworks for building AI agents. It provides a robust toolkit for creating tool-using agents with the ReAct pattern.
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <div class="text-3xl mb-2">🔧</div>
+                    <h4 class="font-semibold text-accent-text">Tools</h4>
+                    <p class="text-sm text-gray-400">Functions the agent can call</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <div class="text-3xl mb-2">🧠</div>
+                    <h4 class="font-semibold text-accent-text">Memory</h4>
+                    <p class="text-sm text-gray-400">Conversation history</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <div class="text-3xl mb-2">🤖</div>
+                    <h4 class="font-semibold text-accent-text">Agent Executor</h4>
+                    <p class="text-sm text-gray-400">Orchestrates the ReAct loop</p>
+                </div>
+            </div>
+
+            <h4 class="text-xl font-semibold text-accent-text mb-3">Creating Tools with @tool Decorator</h4>
+            <div class="code-block">
+<span class="text-purple-400">from</span> langchain.tools <span class="text-purple-400">import</span> tool
+
+<span class="text-blue-400">@tool</span>
+<span class="text-purple-400">def</span> <span class="text-yellow-400">get_transaction</span>(transaction_id: <span class="text-green-400">str</span>) -> <span class="text-green-400">dict</span>:
+    <span class="text-gray-500">"""Retrieve transaction details by ID.
+
+    Args:
+        transaction_id: The unique transaction identifier (e.g., TX-12345)
+
+    Returns:
+        Transaction details including amount, merchant, and timestamp
+    """</span>
+    <span class="text-gray-500"># Your implementation here</span>
+    <span class="text-purple-400">return</span> db.get_transaction(transaction_id)
+
+<span class="text-blue-400">@tool</span>
+<span class="text-purple-400">def</span> <span class="text-yellow-400">flag_for_review</span>(transaction_id: <span class="text-green-400">str</span>, risk_score: <span class="text-green-400">float</span>) -> <span class="text-green-400">str</span>:
+    <span class="text-gray-500">"""Flag a transaction for manual review.
+
+    Args:
+        transaction_id: Transaction to flag
+        risk_score: Risk score between 0 and 1
+    """</span>
+    <span class="text-purple-400">return</span> f<span class="text-green-400">"Transaction {transaction_id} flagged with risk {risk_score}"</span>
+            </div>
+
+            <div class="collapsible-header mt-4" onclick="toggleCollapsible(this)">
+                <span>View Full Agent Setup Example</span>
+                <span class="transform transition-transform">+</span>
+            </div>
+            <div class="collapsible-content">
+                <div class="code-block mt-4">
+<span class="text-purple-400">from</span> langchain_openai <span class="text-purple-400">import</span> ChatOpenAI
+<span class="text-purple-400">from</span> langchain.agents <span class="text-purple-400">import</span> create_react_agent, AgentExecutor
+<span class="text-purple-400">from</span> langchain <span class="text-purple-400">import</span> hub
+
+<span class="text-gray-500"># Initialize the LLM</span>
+llm = ChatOpenAI(model=<span class="text-green-400">"gpt-4"</span>, temperature=<span class="text-orange-400">0</span>)
+
+<span class="text-gray-500"># Define your tools</span>
+tools = [get_transaction, flag_for_review, search_customer_history]
+
+<span class="text-gray-500"># Get a ReAct prompt template from the hub</span>
+prompt = hub.pull(<span class="text-green-400">"hwchase17/react"</span>)
+
+<span class="text-gray-500"># Create the agent</span>
+agent = create_react_agent(llm, tools, prompt)
+
+<span class="text-gray-500"># Create the executor (handles the loop)</span>
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
+    verbose=<span class="text-orange-400">True</span>,  <span class="text-gray-500"># See the ReAct steps</span>
+    max_iterations=<span class="text-orange-400">10</span>
+)
+
+<span class="text-gray-500"># Run the agent</span>
+result = agent_executor.invoke({
+    <span class="text-green-400">"input"</span>: <span class="text-green-400">"Analyze transaction TX-789 for fraud"</span>
+})
+                </div>
+            </div>
+        </section>
+
+        <!-- Lab 1 Transition -->
+        <section id="lab1" class="my-12 card bg-gradient-to-r from-blue-900 to-blue-800">
+            <h3 class="text-3xl font-bold text-white mb-4">Lab 1: LangChain Agents</h3>
+            <p class="text-xl text-blue-200 mb-4">Time: 45 minutes</p>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg mb-4">
+                <h4 class="font-semibold text-white mb-3">What You'll Build</h4>
+                <p class="text-gray-300 mb-3">A <span class="highlight">Research Assistant Agent</span> that can:</p>
+                <ul class="syntax-list text-gray-300">
+                    <li>Search the web for information</li>
+                    <li>Perform calculations</li>
+                    <li>Remember conversation context</li>
+                    <li>Make decisions about which tools to use</li>
+                </ul>
+            </div>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg">
+                <h4 class="font-semibold text-white mb-3">Key Learnings</h4>
+                <ul class="syntax-list text-gray-300">
+                    <li>Creating custom tools with <code class="bg-gray-700 px-1 rounded">@tool</code> decorator</li>
+                    <li>Binding tools to LLMs</li>
+                    <li>Using <code class="bg-gray-700 px-1 rounded">create_react_agent</code> for ReAct loop</li>
+                    <li>Adding memory with <code class="bg-gray-700 px-1 rounded">ConversationBufferMemory</code></li>
+                    <li>Debugging with verbose mode</li>
+                </ul>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-xl text-white">Open: <code class="bg-gray-700 px-2 py-1 rounded">Labs/Session_1/Lab_1_LangChain_Agents.ipynb</code></p>
+            </div>
+        </section>
+
+        <!-- Break -->
+        <section class="my-12 text-center py-8">
+            <h3 class="text-2xl font-bold text-gray-400">☕ Break (15 minutes)</h3>
+        </section>
+
+        <!-- Multi-Agent Systems -->
+        <section id="multi-agent" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Multi-Agent Systems</h3>
+            <p class="text-gray-300 mb-6">
+                Sometimes a single agent isn't enough. <span class="accent-text">Multi-agent systems</span> allow multiple specialized agents to collaborate on complex tasks, each bringing their own expertise.
+            </p>
+
+            <h4 class="text-xl font-semibold text-accent-text mb-4">Collaboration Patterns</h4>
+
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h5 class="font-semibold text-blue-400 mb-2">Sequential</h5>
+                    <div class="diagram-box text-sm py-2">
+Agent A --> Agent B --> Agent C
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Pipeline processing, each agent adds to the work</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h5 class="font-semibold text-teal-400 mb-2">Hierarchical</h5>
+                    <div class="diagram-box text-sm py-2">
+     Manager
+    /   |   \
+  A     B     C
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Manager delegates to specialized workers</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h5 class="font-semibold text-orange-400 mb-2">Collaborative</h5>
+                    <div class="diagram-box text-sm py-2">
+  A <--> B
+   \    /
+    v  v
+     C
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Agents discuss and refine together</p>
+                </div>
+            </div>
+
+            <div class="spark-creativity">
+                <h4 class="font-semibold text-white mb-2">Payments Example: Compliance Review Team</h4>
+                <p class="mb-3">A multi-agent system for reviewing suspicious transactions:</p>
+                <div class="grid md:grid-cols-3 gap-3 mt-3">
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="font-semibold text-blue-400">Researcher Agent</p>
+                        <p class="text-sm text-gray-400">Gathers transaction data, customer history, merchant info</p>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="font-semibold text-teal-400">Analyst Agent</p>
+                        <p class="text-sm text-gray-400">Evaluates patterns, calculates risk scores, identifies anomalies</p>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <p class="font-semibold text-orange-400">Compliance Agent</p>
+                        <p class="text-sm text-gray-400">Reviews against regulations, recommends actions, drafts reports</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AutoGen vs CrewAI -->
+        <section class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">AutoGen vs CrewAI</h3>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="framework-card autogen">
+                    <h4 class="text-xl font-semibold text-teal-400 mb-3">AutoGen (Microsoft)</h4>
+                    <p class="text-gray-300 mb-3">Conversational multi-agent framework where agents communicate through messages.</p>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li>Message-passing between agents</li>
+                        <li>Strong code execution support</li>
+                        <li>Human-in-the-loop built-in</li>
+                        <li>GroupChat for multi-agent discussions</li>
+                    </ul>
+                    <div class="code-block mt-3 text-sm">
+assistant = AssistantAgent(<span class="text-green-400">"analyst"</span>)
+user_proxy = UserProxyAgent(<span class="text-green-400">"user"</span>)
+user_proxy.initiate_chat(assistant, message=<span class="text-green-400">"..."</span>)
+                    </div>
+                </div>
+
+                <div class="framework-card crewai">
+                    <h4 class="text-xl font-semibold text-orange-400 mb-3">CrewAI</h4>
+                    <p class="text-gray-300 mb-3">Role-based collaboration where agents have defined roles and work on tasks together.</p>
+                    <ul class="syntax-list text-gray-300 text-sm">
+                        <li>Role/Goal/Backstory for each agent</li>
+                        <li>Task-based workflow</li>
+                        <li>Intuitive crew composition</li>
+                        <li>Built-in delegation</li>
+                    </ul>
+                    <div class="code-block mt-3 text-sm">
+researcher = Agent(role=<span class="text-green-400">"Researcher"</span>, goal=<span class="text-green-400">"..."</span>)
+task = Task(description=<span class="text-green-400">"..."</span>, agent=researcher)
+crew = Crew(agents=[...], tasks=[...])
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lab 2 Transition -->
+        <section id="lab2" class="my-12 card bg-gradient-to-r from-teal-900 to-teal-800">
+            <h3 class="text-3xl font-bold text-white mb-4">Lab 2: AutoGen & CrewAI</h3>
+            <p class="text-xl text-teal-200 mb-4">Time: 45 minutes</p>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg mb-4">
+                <h4 class="font-semibold text-white mb-3">What You'll Build</h4>
+                <p class="text-gray-300 mb-3">The same <span class="highlight">Multi-Agent Research Team</span> in both frameworks:</p>
+                <ul class="syntax-list text-gray-300">
+                    <li><strong>Researcher:</strong> Gathers information</li>
+                    <li><strong>Writer:</strong> Creates the report</li>
+                    <li><strong>Critic:</strong> Reviews and suggests improvements</li>
+                </ul>
+            </div>
+
+            <div class="bg-black bg-opacity-30 p-5 rounded-lg">
+                <h4 class="font-semibold text-white mb-3">Key Learnings</h4>
+                <ul class="syntax-list text-gray-300">
+                    <li>AutoGen's <code class="bg-gray-700 px-1 rounded">AssistantAgent</code> and <code class="bg-gray-700 px-1 rounded">UserProxyAgent</code></li>
+                    <li>CrewAI's Agent/Task/Crew pattern</li>
+                    <li>Comparing conversation flow vs. role-based approaches</li>
+                    <li>When to choose each framework</li>
+                </ul>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-xl text-white">Open: <code class="bg-gray-700 px-2 py-1 rounded">Labs/Session_1/Lab_2_AutoGen_and_CrewAI.ipynb</code></p>
+            </div>
+        </section>
+
+        <!-- Framework Comparison -->
+        <section id="comparison" class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Framework Comparison</h3>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-600">
+                            <th class="py-3 px-4 text-accent-text">Aspect</th>
+                            <th class="py-3 px-4 text-blue-400">LangChain</th>
+                            <th class="py-3 px-4 text-teal-400">AutoGen</th>
+                            <th class="py-3 px-4 text-orange-400">CrewAI</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4 font-semibold">Best For</td>
+                            <td class="py-3 px-4">Single agents with tools</td>
+                            <td class="py-3 px-4">Conversational multi-agent</td>
+                            <td class="py-3 px-4">Role-based collaboration</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4 font-semibold">Complexity</td>
+                            <td class="py-3 px-4">Low-Medium</td>
+                            <td class="py-3 px-4">Medium</td>
+                            <td class="py-3 px-4">Low</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4 font-semibold">Code Execution</td>
+                            <td class="py-3 px-4">Via tools</td>
+                            <td class="py-3 px-4">Built-in, strong</td>
+                            <td class="py-3 px-4">Via tools</td>
+                        </tr>
+                        <tr class="border-b border-gray-700">
+                            <td class="py-3 px-4 font-semibold">Human-in-Loop</td>
+                            <td class="py-3 px-4">Manual setup</td>
+                            <td class="py-3 px-4">Built-in</td>
+                            <td class="py-3 px-4">Supported</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 font-semibold">Learning Curve</td>
+                            <td class="py-3 px-4">Moderate</td>
+                            <td class="py-3 px-4">Moderate</td>
+                            <td class="py-3 px-4">Easy</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 p-4 bg-gray-800 rounded-lg">
+                <h4 class="font-semibold text-accent-text mb-3">Quick Decision Guide</h4>
+                <ul class="syntax-list text-gray-300">
+                    <li><strong>Need a single agent with multiple tools?</strong> → LangChain</li>
+                    <li><strong>Want agents to have a conversation?</strong> → AutoGen</li>
+                    <li><strong>Prefer role-based, intuitive setup?</strong> → CrewAI</li>
+                    <li><strong>Need complex stateful workflows?</strong> → LangGraph (Session 2)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Session 1 Wrap-up -->
+        <section class="my-12 card">
+            <h3 class="text-3xl font-bold section-title">Session 1 Recap</h3>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-xl font-semibold text-accent-text mb-3">What You Learned</h4>
+                    <ul class="syntax-list text-gray-300">
+                        <li>The ReAct (Reason-Act-Observe) loop</li>
+                        <li>When to use agents vs. simple LLM calls</li>
+                        <li>Building tools with LangChain's <code class="bg-gray-700 px-1 rounded">@tool</code></li>
+                        <li>Adding memory to agents</li>
+                        <li>Multi-agent patterns: Sequential, Hierarchical, Collaborative</li>
+                        <li>AutoGen vs CrewAI trade-offs</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xl font-semibold text-accent-text mb-3">Coming in Session 2</h4>
+                    <ul class="syntax-list text-gray-300">
+                        <li>LangGraph for stateful workflows</li>
+                        <li>Conditional routing and cycles</li>
+                        <li>Human-in-the-loop patterns</li>
+                        <li>SmolAgents and Google ADK overview</li>
+                        <li>Framework selection deep-dive</li>
+                        <li>Capstone: Build your own agent!</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Q&A -->
+        <section class="my-12 text-center py-8 card bg-gradient-to-r from-purple-900 to-purple-800">
+            <h3 class="text-3xl font-bold text-white mb-4">Questions & Discussion</h3>
+            <p class="text-xl text-purple-200">What questions do you have about AI agents?</p>
+            <p class="text-gray-400 mt-4">Session 2 starts after a break</p>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 p-6 mt-12">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>Crafting Custom Agents Workshop | Session 1: Agent Foundations</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleCollapsible(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('span:last-child');
+            content.classList.toggle('open');
+            icon.textContent = content.classList.contains('open') ? '−' : '+';
+        }
+    </script>
+</body>
+</html>
