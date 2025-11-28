@@ -9,14 +9,14 @@ Welcome! This guide will help you navigate the workshop, understand key concepts
 ```
 Session 1: Foundations          Session 2: Advanced Patterns
 ┌─────────────────────────┐     ┌─────────────────────────┐
-│ Lab 1: LangChain Basics │     │ Lab 3: AutoGen Multi-   │
-│ - Tools & prompts       │     │        Agent Systems    │
-│ - ReAct pattern         │     │ - Agent collaboration   │
-├─────────────────────────┤     │ - Conversation patterns │
-│ Lab 2: LangGraph        │     ├─────────────────────────┤
-│ - State machines        │     │ Lab 4: Complex Workflows│
-│ - Conditional routing   │     │ - Human-in-the-loop     │
-│ - Cycles in graphs      │     │ - Production patterns   │
+│ Lab 1: LangChain Basics │     │ Lab 3: LangGraph        │
+│ - Tools & prompts       │     │ - State machines        │
+│ - ReAct pattern         │     │ - Conditional routing   │
+├─────────────────────────┤     │ - Cycles in graphs      │
+│ Lab 2: AutoGen & CrewAI │     ├─────────────────────────┤
+│ - Multi-agent systems   │     │ Lab 4: Capstone Project │
+│ - Agent collaboration   │     │ - Build your own agent  │
+│ - Role-based crews      │     │ - Framework of choice   │
 └─────────────────────────┘     └─────────────────────────┘
 ```
 
@@ -40,10 +40,10 @@ python check_environment.py
 | Lab | Estimated Cost | Notes |
 |-----|---------------|-------|
 | Lab 1 | $0.10 - $0.30 | Basic tool use, few iterations |
-| Lab 2 | $0.20 - $0.50 | State graph with multiple nodes |
-| Lab 3 | $0.30 - $0.75 | Multi-agent conversations |
+| Lab 2 | $0.15 - $0.40 | Multi-agent conversations |
+| Lab 3 | $0.20 - $0.50 | State graph with multiple nodes |
 | Lab 4 | $0.40 - $1.00 | Complex workflows, more tokens |
-| **Total** | **$1.00 - $2.55** | Conservative estimate |
+| **Total** | **$0.85 - $2.20** | Conservative estimate |
 
 **Tips to minimize costs:**
 - Use `gpt-4o-mini` for development/testing
@@ -72,31 +72,14 @@ python check_environment.py
 
 ---
 
-### Lab 2: State Machines with LangGraph
+### Lab 2: Multi-Agent Systems (AutoGen & CrewAI)
 
-**Goal**: Build agents with controlled, predictable workflows.
-
-**Key Concepts**:
-- **State Graph**: Nodes (actions) connected by edges (transitions)
-- **TypedDict State**: Structured data passed between nodes
-- **Conditional Edges**: Dynamic routing based on state
-
-**What You'll Build**: A document analysis pipeline with branching logic.
-
-**Checkpoint Questions**:
-1. When would you use a cycle vs. a linear graph?
-2. How do you prevent infinite loops?
-3. What information should be stored in state?
-
----
-
-### Lab 3: Multi-Agent Systems (AutoGen)
-
-**Goal**: Coordinate multiple specialized agents.
+**Goal**: Coordinate multiple specialized agents using two frameworks.
 
 **Key Concepts**:
 - **Agent Roles**: Specialized agents for different tasks
-- **Group Chat**: Multi-agent conversation management
+- **Group Chat**: Multi-agent conversation management (AutoGen)
+- **Crews & Tasks**: Role-based collaboration (CrewAI)
 - **Handoffs**: Passing tasks between agents
 
 **What You'll Build**: A team of agents (researcher, analyst, writer) working together.
@@ -108,21 +91,40 @@ python check_environment.py
 
 ---
 
-### Lab 4: Production Patterns
+### Lab 3: Stateful Workflows with LangGraph
 
-**Goal**: Build robust, production-ready agent systems.
+**Goal**: Build agents with controlled, predictable workflows.
 
 **Key Concepts**:
+- **State Graph**: Nodes (actions) connected by edges (transitions)
+- **TypedDict State**: Structured data passed between nodes
+- **Conditional Edges**: Dynamic routing based on state
 - **Human-in-the-Loop**: Checkpoints for human review
-- **Error Handling**: Graceful degradation and retries
-- **State Persistence**: Resumable workflows
 
-**What You'll Build**: A complete document processing system with approval gates.
+**What You'll Build**: A document analysis pipeline with branching logic and approval gates.
 
 **Checkpoint Questions**:
-1. What decisions should always require human approval?
-2. How do you handle API failures gracefully?
-3. When should you checkpoint state?
+1. When would you use a cycle vs. a linear graph?
+2. How do you prevent infinite loops?
+3. What information should be stored in state?
+
+---
+
+### Lab 4: Capstone - Build Your Own Agent
+
+**Goal**: Apply everything you've learned to build a complete, functional agent.
+
+**Key Concepts**:
+- **Framework Selection**: Choose the right tool for your use case
+- **Agent Design**: Define tools, state, and workflow
+- **Testing & Iteration**: Validate and refine your agent
+
+**What You'll Build**: Your choice of Code Assistant, Research Agent, Data Analyst, or custom agent.
+
+**Checkpoint Questions**:
+1. Why did you choose this framework for your use case?
+2. What tools does your agent need to accomplish its goal?
+3. How would you extend your agent for production use?
 
 ---
 

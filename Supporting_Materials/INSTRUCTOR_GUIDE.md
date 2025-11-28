@@ -144,36 +144,42 @@ This guide provides teaching tips, timing suggestions, common questions, and ass
 - "What would happen if the search returns no results?"
 - "How would you add error handling here?"
 
-### Lab 2: LangGraph
+### Lab 2: AutoGen & CrewAI
+
+**Common Issues:**
+- Agents talking forever → Set max_turns or max_consecutive_auto_reply
+- Wrong agent responding → Check speaker selection (AutoGen) or task assignment (CrewAI)
+- Confusion about roles → Clarify system messages and backstories
+- CrewAI task dependencies → Ensure context is passed between tasks
+
+**Discussion Prompts:**
+- "When is multi-agent overkill?"
+- "How do agents know when to stop?"
+- "What are the trade-offs between AutoGen and CrewAI?"
+
+### Lab 3: LangGraph Workflows
 
 **Common Issues:**
 - State not updating → Check TypedDict field names
 - Infinite loop → Missing END edge or condition
 - Conditional routing wrong → Print state before routing
+- Checkpoint not working → Check persistence configuration
 
 **Discussion Prompts:**
 - "Why use a graph instead of if/else in code?"
 - "Where would you add human review?"
-
-### Lab 3: AutoGen
-
-**Common Issues:**
-- Agents talking forever → Set max_turns
-- Wrong agent responding → Check speaker selection
-- Confusion about roles → Clarify system messages
-
-**Discussion Prompts:**
-- "When is multi-agent overkill?"
-- "How do agents know when to stop?"
-
-### Lab 4: Production Patterns
-
-**Common Issues:**
-- Checkpoint not working → Check persistence configuration
-- Human review skipped → Verify interrupt_before nodes
-
-**Discussion Prompts:**
 - "What decisions need human approval in your domain?"
+
+### Lab 4: Capstone Project
+
+**Common Issues:**
+- Students stuck on framework choice → Guide them based on their use case
+- Tools not being called → Check tool descriptions are clear and specific
+- Scope creep → Remind them of 45-minute time limit, start simple
+
+**Discussion Prompts:**
+- "Why did you choose this framework?"
+- "What would you add with more time?"
 - "How would you test this in CI/CD?"
 
 ---
