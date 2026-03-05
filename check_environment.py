@@ -66,11 +66,14 @@ def check_packages():
         ("langchain_openai", "langchain-openai"),
         ("langchain_core", "langchain-core"),
         ("langgraph", "langgraph"),
+        ("autogen", "pyautogen"),
+        ("crewai", "crewai"),
         ("dotenv", "python-dotenv"),
     ]
     
     optional_packages = [
-        ("autogen", "pyautogen"),
+        ("smolagents", "smolagents"),
+        ("google.adk", "google-adk"),
         ("anthropic", "anthropic"),
     ]
     
@@ -121,6 +124,17 @@ def check_api_keys():
         print(f"      {YELLOW}Add to .env file: OPENAI_API_KEY=sk-...{RESET}")
         keys_status["openai"] = False
     
+    # Tavily (required for Lab 1 search tools)
+    tavily_key = os.getenv("TAVILY_API_KEY")
+    if tavily_key:
+        masked = tavily_key[:8] + "..." + tavily_key[-4:] if len(tavily_key) > 12 else "****"
+        print_status(f"TAVILY_API_KEY: {masked}", "ok")
+        keys_status["tavily"] = True
+    else:
+        print_status("TAVILY_API_KEY: not found (needed for Lab 1 search tools)", "warn")
+        print(f"      {YELLOW}Get a free key at https://tavily.com{RESET}")
+        keys_status["tavily"] = False
+    
     # Anthropic (optional)
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
     if anthropic_key:
@@ -166,7 +180,7 @@ def check_llm_connectivity():
             raise RuntimeError("openai ChatCompletion.create not found")
 
         resp = create_fn(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": "Say 'OK' and nothing else."}],
             max_tokens=10,
             temperature=0,
@@ -222,7 +236,7 @@ def check_llm_connectivity():
     except Exception:
         # openai package not available or failed; try LangChain chat model
         try:
-            from langchain.chat_models import ChatOpenAI
+            from langchain_openai import ChatOpenAI
             # langchain message classes live in different modules across
             # versions; try a couple of common locations
             HumanMessageClass = None

@@ -230,6 +230,7 @@ Start
 | Approval workflows | LangGraph |
 | Learning/education | SmolAgents |
 | Production on GCP | Google ADK |
+| All-in on OpenAI ecosystem | OpenAI Agents SDK |
 
 ---
 

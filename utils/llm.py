@@ -695,8 +695,9 @@ def get_crewai_llm(
     """
     Get a CrewAI-compatible LLM instance.
     
-    CrewAI uses LangChain LLMs under the hood, so this is a convenience
-    wrapper that returns the appropriate LangChain LLM.
+    Modern CrewAI (0.100+) has its own LLM layer and no longer depends on
+    LangChain. However, it still accepts LangChain LLM objects, so this
+    convenience wrapper returns one for quick setup in workshop labs.
     
     Args:
         model_name: The model to use (default: gpt-4o-mini)

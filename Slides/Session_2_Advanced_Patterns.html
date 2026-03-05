@@ -394,7 +394,7 @@ state = app.get_state(thread_id=<span class="text-green-400">"txn-123"</span>)
             <div class="collapsible-content">
                 <div class="code-block mt-4">
 <span class="text-purple-400">from</span> typing <span class="text-purple-400">import</span> TypedDict
-<span class="text-purple-400">from</span> langgraph.graph <span class="text-purple-400">import</span> StateGraph, END
+<span class="text-purple-400">from</span> langgraph.graph <span class="text-purple-400">import</span> StateGraph, START, END
 
 <span class="text-gray-500"># 1. Define State</span>
 <span class="text-purple-400">class</span> <span class="text-yellow-400">SettlementState</span>(TypedDict):
@@ -429,7 +429,7 @@ graph.add_node(<span class="text-green-400">"classify"</span>, classify)
 graph.add_node(<span class="text-green-400">"require_approval"</span>, require_approval)
 graph.add_node(<span class="text-green-400">"auto_approve"</span>, auto_approve)
 
-graph.set_entry_point(<span class="text-green-400">"classify"</span>)
+graph.add_edge(START, <span class="text-green-400">"classify"</span>)
 graph.add_conditional_edges(<span class="text-green-400">"classify"</span>, route_by_value)
 graph.add_edge(<span class="text-green-400">"require_approval"</span>, END)
 graph.add_edge(<span class="text-green-400">"auto_approve"</span>, END)
@@ -503,6 +503,7 @@ result = app.invoke({
 
 <span class="text-blue-400">@tool</span>
 <span class="text-purple-400">def</span> <span class="text-yellow-400">calculate</span>(expression: <span class="text-green-400">str</span>) -> <span class="text-green-400">float</span>:
+    <span class="text-gray-500"># Simplified for demo; see Lab 1 for safe math</span>
     <span class="text-purple-400">return</span> eval(expression)
 
 agent = CodeAgent(tools=[calculate])
@@ -777,7 +778,7 @@ agent = Agent(
                     <ul class="syntax-list text-gray-300 text-sm">
                         <li><a href="https://python.langchain.com/docs/" class="text-blue-400 hover:underline">LangChain Docs</a></li>
                         <li><a href="https://langchain-ai.github.io/langgraph/" class="text-purple-400 hover:underline">LangGraph Guide</a></li>
-                        <li><a href="https://microsoft.github.io/autogen/" class="text-teal-400 hover:underline">AutoGen Docs</a></li>
+                        <li><a href="https://ag2ai.github.io/ag2/" class="text-teal-400 hover:underline">AutoGen/AG2 Docs</a></li>
                         <li><a href="https://docs.crewai.com/" class="text-orange-400 hover:underline">CrewAI Docs</a></li>
                     </ul>
                 </div>

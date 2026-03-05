@@ -62,7 +62,7 @@ def calculate(expression: str) -> float:
     Args:
         expression: A mathematical expression like "2 + 2" or "15 * 0.15"
     """
-    return eval(expression)
+    return eval(expression)  # Simplified for illustration; see Lab 1 for a safe alternative
 
 # Create the model (uses LiteLLM for provider flexibility)
 model = LiteLLMModel(model_id="gpt-4o-mini")

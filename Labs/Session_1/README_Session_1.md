@@ -107,10 +107,11 @@ An AI agent is an LLM-powered system that can:
 - **Strengths:** Extensive tool ecosystem, good debugging
 - **Approach:** ReAct loop with customizable prompts
 
-### AutoGen
+### AutoGen (AG2)
 - **Best for:** Conversational multi-agent systems
 - **Strengths:** Code execution, human-in-the-loop
 - **Approach:** Message-passing between agents
+- **Note:** This workshop uses the `pyautogen` package (AG2 fork). Microsoft's separate AutoGen 0.4+ rewrite uses a different API.
 
 ### CrewAI
 - **Best for:** Role-based collaboration
@@ -124,7 +125,7 @@ An AI agent is an LLM-powered system that can:
 ### Lab 1: LangChain Agents (~45 min)
 
 Build a research assistant agent with:
-- Custom tools (web search, calculator, Wikipedia)
+- Custom tools (web search, calculator, notes)
 - Conversational memory
 - Verbose debugging
 
@@ -200,6 +201,6 @@ In Session 2, you'll learn:
 ## Resources
 
 - [LangChain Agents Documentation](https://python.langchain.com/docs/modules/agents/)
-- [AutoGen Documentation](https://microsoft.github.io/autogen/)
+- [AutoGen/AG2 Documentation](https://ag2ai.github.io/ag2/)
 - [CrewAI Documentation](https://docs.crewai.com/)
 - [ReAct Paper](https://arxiv.org/abs/2210.03629)

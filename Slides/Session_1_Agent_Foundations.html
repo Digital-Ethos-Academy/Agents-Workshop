@@ -327,9 +327,9 @@
 
 <span class="text-yellow-400">REASON:</span> I need to look up the transaction details first.
 <span class="text-green-400">ACT:</span> get_transaction(id="TX-789")
-<span class="text-purple-400">OBSERVE:</span> {amount: $5000, merchant: "Luxury Goods", location: "Nigeria", time: "3:00 AM"}
+<span class="text-purple-400">OBSERVE:</span> {amount: $5000, merchant: "Luxury Goods", location: "UK", time: "3:00 AM"}
 
-<span class="text-yellow-400">REASON:</span> High amount, unusual merchant category, foreign location, odd time.
+<span class="text-yellow-400">REASON:</span> High amount, unusual merchant category, atypical location, odd time.
          I should check the customer's transaction history.
 <span class="text-green-400">ACT:</span> get_customer_history(customer_id="C-456")
 <span class="text-purple-400">OBSERVE:</span> {avg_transaction: $150, usual_locations: ["US"], typical_merchants: ["Grocery", "Gas"]}
@@ -343,7 +343,7 @@
 <span class="text-yellow-400">REASON:</span> Task complete. I've analyzed and flagged the suspicious transaction.
 
 <span class="text-blue-400">Agent:</span> "Transaction TX-789 has been flagged as potentially fraudulent (risk score: 92%).
-        Key concerns: amount 33x above average, unusual location (Nigeria vs typical US),
+        Key concerns: amount 33x above average, unusual location (UK vs typical US),
         new merchant category, and transaction occurred at 3:00 AM."
                 </div>
             </div>

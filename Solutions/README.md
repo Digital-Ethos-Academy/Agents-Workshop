@@ -41,6 +41,16 @@ This directory contains reference implementations for all workshop labs.
   - Multiple processing nodes
   - Checkpointing with MemorySaver
 
+### Lab 4: Capstone — Compliance Document Reviewer
+- **File:** `lab4_capstone_compliance_agent.py`
+- **Description:** LangGraph-based agent that reviews documents for regulatory compliance in financial services.
+- **Key Features:**
+  - State machine architecture with classification → extraction → risk analysis pipeline
+  - Document type classification (policy, contract, disclosure, marketing)
+  - Entity extraction (parties, dates, regulations referenced)
+  - Risk scoring with severity levels and human-in-the-loop for high-risk documents
+  - Comprehensive analysis summary with recommendations
+
 ## Running the Solutions
 
 1. Ensure your virtual environment is activated:
@@ -60,6 +70,7 @@ This directory contains reference implementations for all workshop labs.
    python Solutions/lab2_autogen_research_team.py
    python Solutions/lab2_crewai_research_team.py
    python Solutions/lab3_langgraph_document_workflow.py
+   python Solutions/lab4_capstone_compliance_agent.py
    ```
 
 ## Framework Comparison Summary

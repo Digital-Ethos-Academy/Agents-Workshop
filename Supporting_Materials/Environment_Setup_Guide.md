@@ -209,7 +209,7 @@ print("CrewAI agent created successfully!")
 
 ### Test LangGraph
 ```python
-from langgraph.graph import StateGraph, END
+from langgraph.graph import StateGraph, START, END
 from typing import TypedDict
 
 class State(TypedDict):
@@ -217,7 +217,7 @@ class State(TypedDict):
 
 graph = StateGraph(State)
 graph.add_node("test", lambda x: {"value": "success"})
-graph.set_entry_point("test")
+graph.add_edge(START, "test")
 graph.add_edge("test", END)
 app = graph.compile()
 
@@ -251,8 +251,8 @@ config = {
 
 ### CrewAI execution errors
 ```bash
-# CrewAI sometimes needs specific versions
-pip install crewai==0.30.0 --upgrade
+# If CrewAI has issues, reinstall from requirements.txt
+pip install -r requirements.txt --force-reinstall
 ```
 
 ### LangGraph state errors
@@ -311,14 +311,18 @@ pip list | grep -E "langchain|autogen|crewai|langgraph"
 
 ## Framework Versions (Tested)
 
-These versions are known to work together:
+These versions are pinned in `requirements.txt` and are known to work together:
 ```
-langchain>=0.2.0
-langchain-openai>=0.1.0
-langgraph>=0.1.0
-pyautogen>=0.2.0
-crewai>=0.30.0
+langchain==0.3.27
+langchain-openai==0.3.35
+langgraph==0.6.10
+pyautogen==0.9.0
+crewai==0.150.0
+smolagents==1.20.0
+google-adk==1.19.0
 ```
+
+Always install from `requirements.txt` to get the tested version set.
 
 ---
 
@@ -337,5 +341,5 @@ If you encounter issues:
 
 - [LangChain Documentation](https://python.langchain.com/docs/)
 - [LangGraph Tutorials](https://langchain-ai.github.io/langgraph/)
-- [AutoGen Documentation](https://microsoft.github.io/autogen/)
+- [AutoGen/AG2 Documentation](https://ag2ai.github.io/ag2/)
 - [CrewAI Documentation](https://docs.crewai.com/)

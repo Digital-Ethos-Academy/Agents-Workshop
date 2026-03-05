@@ -68,7 +68,11 @@ Agents-Workshop/
 │       ├── Lab_3_LangGraph_Workflows.ipynb
 │       └── Lab_4_Capstone_Build_Your_Agent.ipynb
 ├── Solutions/                     # Reference implementations
-│   └── lab4_capstone_compliance_agent.py  # Capstone example
+│   ├── lab1_langchain_research_agent.py
+│   ├── lab2_autogen_research_team.py
+│   ├── lab2_crewai_research_team.py
+│   ├── lab3_langgraph_document_workflow.py
+│   └── lab4_capstone_compliance_agent.py
 ├── Slides/                        # Presentation decks
 └── Supporting_Materials/
     ├── Environment_Setup_Guide.md
@@ -175,9 +179,10 @@ This workshop uses OpenAI APIs. Estimated costs per lab (using `gpt-4o-mini`):
 | Framework | Best For | Key Strength |
 |-----------|----------|--------------|
 | **LangChain** | Single agents with tools | Extensive tool ecosystem, ReAct loop |
-| **AutoGen** | Conversational multi-agent | Code execution, human-in-the-loop |
+| **AutoGen (AG2)** | Conversational multi-agent | Code execution, human-in-the-loop |
 | **CrewAI** | Role-based collaboration | Intuitive role/task/crew abstractions |
 | **LangGraph** | Complex stateful workflows | Conditional routing, cycles, checkpoints |
+| **OpenAI Agents SDK** | Production OpenAI agents | Built-in tracing, handoffs, guardrails |
 | **SmolAgents** | Lightweight agents | Simple, minimal overhead |
 | **Google ADK** | Google ecosystem | Production deployment, Vertex AI |
 | **A2A Protocol** | Agent interoperability | Cross-framework communication standard |
@@ -189,7 +194,7 @@ Choose your framework based on:
 1. **Single vs. Multi-Agent**: LangChain for single, AutoGen/CrewAI for multi
 2. **Conversation vs. Workflow**: AutoGen for chat, LangGraph for DAGs
 3. **Simplicity vs. Control**: SmolAgents for simple, LangGraph for complex
-4. **Ecosystem**: ADK if heavily invested in Google Cloud
+4. **Ecosystem**: ADK for Google Cloud, OpenAI Agents SDK if all-in on OpenAI
 
 ---
 
@@ -218,7 +223,7 @@ Choose your preferred framework and build an agent for a real use case:
 
 - [LangChain Documentation](https://python.langchain.com/docs/)
 - [LangGraph Guide](https://langchain-ai.github.io/langgraph/)
-- [AutoGen Documentation](https://microsoft.github.io/autogen/)
+- [AutoGen/AG2 Documentation](https://ag2ai.github.io/ag2/)
 - [CrewAI Documentation](https://docs.crewai.com/)
 - [SmolAgents Guide](https://huggingface.co/docs/smolagents/)
 - [Google ADK](https://google.github.io/adk-docs/)
@@ -234,6 +239,8 @@ Choose your preferred framework and build an agent for a real use case:
 
 **Issue:** AutoGen agents stuck in infinite loop
 - **Solution:** Use `max_consecutive_auto_reply` parameter or adjust termination conditions
+
+> **Note on AutoGen/AG2:** This workshop uses the `pyautogen` package, which is maintained by the [AG2 community](https://ag2ai.github.io/ag2/) (formerly AutoGen). Microsoft has since released a separate rewrite (AutoGen 0.4+) with a different API. The code and patterns in this workshop are compatible with the AG2/pyautogen package installed via `requirements.txt`.
 
 **Issue:** `ModuleNotFoundError` for any framework
 - **Solution:** Ensure virtual environment is activated and run `pip install -r requirements.txt`

@@ -4,6 +4,8 @@ Lab 1 Solution: LangChain Research Agent
 A complete research assistant agent with tools, memory, and debugging.
 """
 
+import ast
+import operator
 import os
 from datetime import datetime
 from dotenv import load_dotenv
@@ -22,6 +24,28 @@ notes_storage = []
 
 # ============ TOOLS ============
 
+# SECURITY NOTE: Never use eval() for math — it can execute arbitrary code.
+# This AST-based approach only allows numbers and basic math operators.
+_MATH_OPS = {ast.Add: operator.add, ast.Sub: operator.sub,
+             ast.Mult: operator.mul, ast.Div: operator.truediv,
+             ast.Pow: operator.pow, ast.USub: operator.neg}
+
+
+def _safe_math(expr: str):
+    """Evaluate a math expression safely using AST parsing."""
+    def _eval(node):
+        if isinstance(node, ast.Expression):
+            return _eval(node.body)
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return node.value
+        if isinstance(node, ast.BinOp) and type(node.op) in _MATH_OPS:
+            return _MATH_OPS[type(node.op)](_eval(node.left), _eval(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _MATH_OPS:
+            return _MATH_OPS[type(node.op)](_eval(node.operand))
+        raise ValueError(f"Unsupported: {ast.dump(node)}")
+    return _eval(ast.parse(expr.strip(), mode='eval'))
+
+
 @tool
 def calculator(expression: str) -> str:
     """Evaluates a mathematical expression and returns the result.
@@ -30,10 +54,7 @@ def calculator(expression: str) -> str:
         expression: A mathematical expression like '2 + 2' or '15 * 7'
     """
     try:
-        allowed_chars = set('0123456789+-*/.() ')
-        if not all(c in allowed_chars for c in expression):
-            return "Error: Invalid characters in expression"
-        result = eval(expression)
+        result = _safe_math(expression)
         return f"The result of {expression} is {result}"
     except Exception as e:
         return f"Error evaluating expression: {str(e)}"

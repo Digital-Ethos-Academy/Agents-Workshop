@@ -298,10 +298,10 @@ When should you use which framework?
 
 ## Using the Utils Package
 
-This workshop includes a `utils/` package that provides helpful abstractions:
+The repository includes a `utils/` package with convenience helpers for LLM initialization and model configuration. **The labs do not require it** — each notebook sets up its own LLM directly — but you can optionally use it to reduce boilerplate:
 
 ```python path=null start=null
-# Instead of manual setup each time
+# Optional: use utils helpers instead of manual ChatOpenAI() setup
 import sys
 sys.path.insert(0, "../..")
 
@@ -309,13 +309,9 @@ from utils import (
     load_environment,       # Load .env and validate keys
     get_langchain_llm,      # Get configured LLM for LangChain
     get_autogen_config,     # Get config for AutoGen
-    OPENAI_MODELS,          # Available model names
 )
 
-# Load environment once
 load_environment()
-
-# Get an LLM
 llm = get_langchain_llm("gpt-4o-mini", temperature=0)
 ```
 

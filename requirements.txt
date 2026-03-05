@@ -1,5 +1,5 @@
 # Agents Workshop Dependencies
-# Versions pinned for reproducibility (tested November 2024)
+# Versions pinned for reproducibility (tested March 2026)
 
 # LangChain Ecosystem
 langchain==0.3.27

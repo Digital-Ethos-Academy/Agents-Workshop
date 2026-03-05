@@ -233,11 +233,13 @@ agent.run("What's the weather in Paris?")
 
 ### The Capstone Challenge
 
-Students should build a **Compliance Document Reviewer** using LangGraph that:
+Students choose their own agent project (Code Assistant, Research Agent, Data Analyst, or custom idea). The **reference solution** demonstrates a Compliance Document Reviewer using LangGraph that:
 1. Classifies document type
 2. Extracts compliance-relevant entities
 3. Flags potential risks
 4. Routes for human review when needed
+
+Share the reference solution after students have worked independently for 30+ minutes.
 
 ### Rubric (if grading)
 
